@@ -1,15 +1,20 @@
 {
   "name": "lewebsimple/wp-config",
   "description": "WordPress configuration and environment loader",
-  "version": "0.1.0",
   "type": "library",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Pascal Martineau",
+      "email": "pascal@lewebsimple.ca"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "LeWebSimple\\": "src/"
     }
   },
   "require": {
-    "vlucas/phpdotenv": "*"
+    "vlucas/phpdotenv": "^5.5"
   }
 }
