@@ -14,6 +14,9 @@ class WpConfig {
 	/** @var string Path where .env files are located */
 	private $path;
 
+	/** @var string Current environment (development / production) */
+	private $env;
+
 	/**
 	 * Constructor to initialize the path
 	 *
@@ -21,6 +24,16 @@ class WpConfig {
 	 */
 	public function __construct( $path ) {
 		$this->path = rtrim( $path, DIRECTORY_SEPARATOR );
+		$this->env  = getenv( 'WP_ENV' ) ?: 'production';
+	}
+
+	/**
+	 * Check if currently in production environment
+	 *
+	 * @return bool
+	 */
+	public function is_production() {
+		return $this->env === 'production';
 	}
 
 	/**
@@ -57,6 +70,10 @@ class WpConfig {
 
 		// Disable CRON
 		$this->define( 'DISABLE_WP_CRON', $this->boolean( getenv( 'DISABLE_WP_CRON' ) ?: false ) );
+
+		// WP Offload SES
+		$this->define( 'WPOSES_AWS_ACCESS_KEY_ID', getenv( 'WPOSES_AWS_ACCESS_KEY_ID' ) ?: '' );
+		$this->define( 'WPOSES_AWS_SECRET_ACCESS_KEY', getenv( 'WPOSES_AWS_SECRET_ACCESS_KEY' ) ?: '' );
 	}
 
 	/**
