@@ -1,0 +1,15 @@
+{
+  "name": "lewebsimple/wp-config",
+  "description": "WordPress configuration and environment loader",
+  "version": "0.1.0",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "LeWebSimple\\": "src/"
+    }
+  },
+  "require": {
+    "vlucas/phpdotenv": "*"
+  }
+}
