@@ -117,4 +117,32 @@ class WpConfig {
 	public function get_table_prefix() {
 		return getenv( 'TABLE_PREFIX' ) ?: 'wp_';
 	}
+
+
+	/**
+	 * Protect dotfiles from being accessed directly
+	 *
+	 * @return void
+	 */
+	public function protect_dotfiles() {
+		if ( function_exists( 'add_action' ) ) {
+			add_action( 'mod_rewrite_rules', array( $this, 'mod_rewrite_rules' ) );
+		}
+	}
+
+	/**
+	 * Add mod_rewrite rules to protect .env files
+	 *
+	 * @param string $rules Current mod_rewrite rules.
+	 * @return string
+	 */
+	public function mod_rewrite_rules( $rules ) {
+		$custom_rules = array(
+			'# Prevent access to dotfiles',
+			'<FilesMatch "^\.">',
+			'  Require all denied',
+			'</FilesMatch>',
+		);
+		return $rules . implode( "\n", $custom_rules );
+	}
 }
