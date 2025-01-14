@@ -71,6 +71,11 @@ class WpConfig {
 		// Disable CRON
 		$this->define( 'DISABLE_WP_CRON', $this->boolean( getenv( 'DISABLE_WP_CRON' ) ?: false ) );
 
+		// Allow WordPress to detect HTTPS when behind a reverse proxy or load balancer
+		if ( $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '' === 'https' ) {
+			$_SERVER['HTTPS'] = 'on';
+		}
+
 		// Site settings
 		if ( $site_url = getenv( 'WP_SITEURL' ) ?: $_SERVER['HTTP_ORIGIN'] ?? false ) {
 			$this->define( 'WP_SITEURL', $site_url );
