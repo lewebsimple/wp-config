@@ -46,7 +46,7 @@ class WpConfig {
 			->addAdapter( PutenvAdapter::class )
 			->immutable()
 			->make();
-		$dotenv     = Dotenv::create( $repository, $this->path );
+		$dotenv     = Dotenv::create( $repository, $this->path, array( '.env', ".env.{$this->env}" ), false );
 		$dotenv->load();
 		$this->define_constants();
 	}
@@ -58,7 +58,7 @@ class WpConfig {
 	 */
 	private function define_constants() {
 		// Environment settings
-		$this->define( 'WP_ENV', getenv( 'WP_ENV' ) ?: 'production' );
+		$this->define( 'WP_ENV', $this->env );
 
 		// Database settings
 		$this->define( 'DB_NAME', getenv( 'DB_NAME' ) );
@@ -70,6 +70,12 @@ class WpConfig {
 
 		// Disable CRON
 		$this->define( 'DISABLE_WP_CRON', $this->boolean( getenv( 'DISABLE_WP_CRON' ) ?: false ) );
+
+		// Site settings
+		if ( $site_url = getenv( 'WP_SITEURL' ) ?: $_SERVER['HTTP_ORIGIN'] ?? false ) {
+			$this->define( 'WP_SITEURL', $site_url );
+		}
+		getenv( 'WP_HOME' ) && $this->define( 'WP_HOME', getenv( 'WP_HOME' ) );
 
 		// WP Offload SES
 		$this->define( 'WPOSES_AWS_ACCESS_KEY_ID', getenv( 'WPOSES_AWS_ACCESS_KEY_ID' ) ?: '' );
