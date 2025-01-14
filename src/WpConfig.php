@@ -54,6 +54,9 @@ class WpConfig {
 		$this->define( 'DB_HOST', getenv( 'DB_HOST' ) ?: 'localhost' );
 		$this->define( 'DB_CHARSET', getenv( 'DB_CHARSET' ) ?: 'utf8' );
 		$this->define( 'DB_COLLATE', getenv( 'DB_COLLATE' ) ?: '' );
+
+		// Disable CRON
+		$this->define( 'DISABLE_WP_CRON', $this->boolean( getenv( 'DISABLE_WP_CRON' ) ?: false ) );
 	}
 
 	/**
@@ -66,5 +69,24 @@ class WpConfig {
 		if ( ! defined( $name ) ) {
 			define( $name, $value );
 		}
+	}
+
+	/**
+	 * Convert value to a boolean.
+	 *
+	 * @param mixed $value The value to convert.
+	 * @return bool
+	 */
+	private function boolean( $value ) {
+		return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+	}
+
+	/**
+	 * Get the WordPress table prefix
+	 *
+	 * @return string
+	 */
+	public function get_table_prefix() {
+		return getenv( 'TABLE_PREFIX' ) ?: 'wp_';
 	}
 }
